@@ -223,7 +223,7 @@ Screenshots can be added for:
 ![Second](home-page.png2.jpeg)
 
 ### 🔐 Login Page
-![Login Page](screenshots/login-page.png)
+![Login Page](login-page.png.jpeg)
 
 ### 👨‍💼 Admin Dashboard
 ![Admin Dashboard](screenshots/admin-dashboard.png)
