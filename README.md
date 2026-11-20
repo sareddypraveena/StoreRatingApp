@@ -359,7 +359,7 @@ Displays store details maintained in the database.
 
 Displays ratings submitted by users for different stores.
 
-![Ratings Table](rating.sql.png1.png.jpg)
+![Ratings Table](rating.sql.png1.jpg)
 
 ### 🔍 6. Database Query Results
 
