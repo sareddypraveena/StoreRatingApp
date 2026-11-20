@@ -275,7 +275,120 @@ Screenshots can be added for:
 ![sec](backend.png2.jpeg)
 ![third](backend.png3.jpeg)
 ![four](backend.png4.jpeg)
-  
+
+
+## 🗄️ Database Architecture & MySQL Outputs
+
+The Store Rating App uses MySQL as its relational database to manage users, stores, and ratings.
+
+The database is designed to maintain data integrity, manage relationships between tables, and prevent duplicate store ratings.
+
+### 🏗️ 1. Database Schema Architecture (ER Diagram)
+
+The Entity Relationship Diagram (ERD) illustrates the database structure and relationships between the `users`, `stores`, and `ratings` tables.
+
+## Project MYSQL Archeticture:
+
+┌───────────────────┐   ┌───────────────────┐   ┌───────────────────┐
+ │   ADMINISTRATOR   │   │    NORMAL USER    │   │    STORE OWNER    │
+ │ Adds users/stores │   │ Searches stores   │   │ Views averages    │
+ │ Views totals      │   │ Adds/edits ratings│   │ Sees who rated    │
+ └─────────┬─────────┘   └─────────┬─────────┘   └─────────┬─────────┘
+           │                       │                       │
+           └───────────────────────┼───────────────────────┘
+                                   ▼
+ ┌───────────────────────────────────────────────────────────────────┐
+ │                     FRONTEND · REACT + VITE                       │
+ │                                                                   │
+ │  Shared login page  ·  User signup  ·  Dashboards for each role  │
+ └─────────────────────────────────┬─────────────────────────────────┘
+                                   ↕
+                   HTTP requests and JSON responses
+                    Login token on protected requests
+                                   ↕
+ ┌───────────────────────────────────────────────────────────────────┐
+ │                     BACKEND · NODE.JS + EXPRESS                   │
+ │                                                                   │
+ │  Checks passwords and roles                                       │
+ │  Validates and saves ratings from 1 to 5                          │
+ │  Retrieves dashboard totals, averages, and rater lists            │
+ └─────────────────────────────────┬─────────────────────────────────┘
+                                   ↕
+                              SQL queries
+                                   ↕
+ ┌───────────────────────────────────────────────────────────────────┐
+ │                          DATABASE · MYSQL                         │
+ │                                                                   │
+ │  Users               Stores                Ratings               │
+ │  Account and role    Details and owner     User, store, score     │
+ └───────────────────────────────────────────────────────────────────┘
+
+
+### 📋 2. Database Tables Structure
+
+The application uses three main tables:
+
+| Table | Description |
+|---|---|
+| `users` | Stores registered users and their roles |
+| `stores` | Stores information about registered stores |
+| `ratings` | Stores user ratings for different stores |
+
+### 👥 3. Users Table — MySQL Output
+
+Displays the registered users stored in the database.
+
+![Users Table](.png)
+
+### 🏬 4. Stores Table — MySQL Output
+
+Displays store details maintained in the database.
+
+![Stores Table](screenshots/mysql-stores.png)
+
+### ⭐ 5. Ratings Table — MySQL Output
+
+Displays ratings submitted by users for different stores.
+
+![Ratings Table](screenshots/mysql-ratings.png)
+
+### 🔍 6. Database Query Results
+
+MySQL queries used to verify the application data:
+
+```sql
+USE store_rating;
+
+SELECT * FROM users;
+
+SELECT * FROM stores;
+
+SELECT * FROM ratings;
+```
+
+### 🔐 7. Database Integrity
+
+- Primary keys uniquely identify records.
+- Foreign keys define relationships between tables where configured.
+- A unique constraint on `ratings(user_id, store_id)` prevents duplicate ratings for the same store by the same user.
+- User passwords are stored as hashes rather than plain text.
+
+### 📁 8. SQL Schema File
+
+The SQL schema file contains the database table definitions and constraints required to recreate the database structure.
+
+[View Database Schema](schema.sql)
+
+---
+
+**Database:** MySQL  
+**Backend:** Node.js + Express.js  
+**Frontend:** React.js  
+**Authentication:** JWT
+
+
+
+
 
 ## 👩‍💻 Developed By
 
