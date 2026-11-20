@@ -268,10 +268,10 @@ Screenshots can be added for:
 
 
 ### 🖥️ Backend Output
-![Backend Output](backend.png1.jpg)
-![sec](backend.png2.jpg)
-![third](backend.png3.jpg)
-![four](backend.png4.jpg)
+![Backend Output](backend.png1.jpeg)
+![sec](backend.png2.jpeg)
+![third](backend.png3.jpeg)
+![four](backend.png4.jpeg)
   
 
 ## 👩‍💻 Developed By
