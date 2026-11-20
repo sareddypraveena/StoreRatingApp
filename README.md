@@ -235,7 +235,12 @@ Screenshots can be added for:
 
 
 ### 👤 User Dashboard
-![User Dashboard](screenshots/user-dashboard.png)
+![User Dashboard](user-page.png1.jpg)
+![second](user-page.png2.jpg)
+![third](user-page.png3.jpg)
+![four](user-page.png4.jpg)
+![five](user-page.png5.jpg)
+
 
 ### ⭐ Store Ratings
 ![Store Ratings](screenshots/store-ratings.png)
