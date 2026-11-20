@@ -61,12 +61,12 @@ Each role has a dedicated dashboard and access to different functionalities.
 - View users who submitted ratings for their stores.
 - View customer rating details.
 - Log out of the application.
-  
-  ![Store Owner](store-owner.png1)
-  ![store](store-owner.png2)
-  ![store](store-owner.png3)
-  ![store](store-owner.png4)
-  ![store](store-owner.png5)
+  ### 🏪 Store Owner
+  ![store](store-owner.png1.jpg)
+  ![store](store-owner.png2.jpg)
+  ![store](store-owner.png3.jpg)
+  ![store](store-owner.png4.jpg)
+  ![store](store-owner.png5.jpg)
   
 
 ## 🔐 Form Validation Requirements
