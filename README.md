@@ -257,6 +257,8 @@ Screenshots can be added for:
 ![four](user-page.png4.jpg)
 ![five](user-page.png5.jpg)
 ![five](user-page.png6.jpg)
+![five](add-store.png1.jpg)
+
 
 
 ### ⭐ Store Ratings
