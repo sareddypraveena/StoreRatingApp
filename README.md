@@ -220,6 +220,7 @@ Screenshots can be added for:
 
 ### 🏠 Home Page
 ![Home Page](home-page.png1.jpeg)
+![Home Page](home page image2.jpg)
 
 ### 🔐 Login Page
 ![Login Page](screenshots/login-page.png)
