@@ -1,16 +1,16 @@
 ### 🏪 A Full Stack Store Rating and Management System
 
-A full-stack web application developed as part of the **FullStack Intern Coding Challenge**. The platform allows users to explore registered stores, submit ratings from 1 to 5, and manage store information through role-based dashboards.
+A full-stack web application developed as part of the "FullStack Intern Coding Challenge". The platform allows users to explore registered stores, submit ratings from 1 to 5, and manage store information through role-based dashboards.
 
 ## 📖 Project Overview
 
-The **Store Rating App** is designed to provide a centralized platform for store ratings and management.
+The Store Rating App is designed to provide a centralized platform for store ratings and management.
 
 The application supports three user roles:
 
-1. **System Administrator**
-2. **Normal User**
-3. **Store Owner**
+1. System Administrator
+2. Normal User
+3. Store Owner
 
 Each role has a dedicated dashboard and access to different functionalities.
 
@@ -347,7 +347,7 @@ Displays the registered users stored in the database.
 
 Displays store details maintained in the database.
 
-![Stores Table](screenshots/mysql-stores.png)
+![Stores Table](store.sql.png1.jpg)
 
 ### ⭐ 5. Ratings Table — MySQL Output
 
@@ -383,11 +383,10 @@ The SQL schema file contains the database table definitions and constraints requ
 [View Database Schema](schema.sql)
 
 ---
-
-**Database:** MySQL  
-**Backend:** Node.js + Express.js  
-**Frontend:** React.js  
-**Authentication:** JWT
+Database:MySQL  
+Backend:Node.js + Express.js  
+Frontend:** React.js  
+Authentication: JWT
 
 
 
@@ -395,14 +394,14 @@ The SQL schema file contains the database table definitions and constraints requ
 
 ## 👩‍💻 Developed By
 
-**Sareddy Praveena**
+Sareddy Praveena
 
-**GitHub:** [sareddypraveena](https://github.com/sareddypraveena)
+**GitHub: [sareddypraveena](https://github.com/sareddypraveena)
 
-**Project Repository:** [StoreRatingApp](https://github.com/sareddypraveena/StoreRatingApp)
+Project Repository: [StoreRatingApp](https://github.com/sareddypraveena/StoreRatingApp)
 
 ---
 
-⭐ **Explore Stores • Rate Your Favorites • Share Experiences**
+⭐ Explore Stores • Rate Your Favorites • Share Experiences
 
-*Developed as part of the FullStack Intern Coding Challenge.*
+Developed as part of the FullStack Intern Coding Challenge.
