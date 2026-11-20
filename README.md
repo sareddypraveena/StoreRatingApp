@@ -226,7 +226,13 @@ Screenshots can be added for:
 ![Login Page](login-page.png.jpeg)
 
 ### 👨‍💼 Admin Dashboard
-![Admin Dashboard](screenshots/admin-dashboard.png)
+![Admin Dashboard](admin-page.png1.jpg)
+![second](admin-page.png2.jpg)
+![third](admin-page.png3.jpg)
+![four](admin-page.png4.jpg)
+![five](admin-page.png5.jpg)
+![six](admin-page.png6.jpg)
+
 
 ### 👤 User Dashboard
 ![User Dashboard](screenshots/user-dashboard.png)
