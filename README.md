@@ -338,7 +338,10 @@ The application uses three main tables:
 
 Displays the registered users stored in the database.
 
-![Users Table](.png)
+![Users Table](sql.png1.jpg)
+![sec](sql.png2.jpg)
+![third](sql.png3.jpg)
+![four](sql.png4.jpg)
 
 ### 🏬 4. Stores Table — MySQL Output
 
