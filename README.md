@@ -248,7 +248,7 @@ Screenshots can be added for:
 ![Second](rate-page.png2.jpg)
 ![third](rate-page.png3.jpg)
 ![four](rate-page.png4.jpg)
-![five](rate-page.png5.jpg)
+![fivee](rate-page.png5.jpg)
 
 ### 🖥️ Backend Output
 ![Backend Output](screenshots/backend-output.png)
