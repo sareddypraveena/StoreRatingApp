@@ -1,5 +1,3 @@
-<img width="1524" height="680" alt="image" src="https://github.com/user-attachments/assets/fa3b42e4-f21a-4d96-965c-e375b81dc5af" /># ⭐ Store Rating App
-
 ### 🏪 A Full Stack Store Rating and Management System
 
 A full-stack web application developed as part of the **FullStack Intern Coding Challenge**. The platform allows users to explore registered stores, submit ratings from 1 to 5, and manage store information through role-based dashboards.
