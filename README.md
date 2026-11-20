@@ -244,7 +244,10 @@ Screenshots can be added for:
 
 
 ### ⭐ Store Ratings
-![Store Ratings](screenshots/store-ratings.png)
+![Store Ratings](rate-page.png1.jpg)
+![Second](rate-page.png2.jpg)
+![third](rate-page.png3.jpg)
+![four](rate-page.png4.jpg)
 
 ### 🖥️ Backend Output
 ![Backend Output](screenshots/backend-output.png)
