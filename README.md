@@ -400,7 +400,7 @@ Authentication: JWT
 
 Sareddy Praveena
 
-**GitHub: [sareddypraveena](https://github.com/sareddypraveena)
+GitHub: [sareddypraveena](https://github.com/sareddypraveena)
 
 Project Repository: [StoreRatingApp](https://github.com/sareddypraveena/StoreRatingApp)
 
