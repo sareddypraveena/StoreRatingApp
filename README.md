@@ -215,6 +215,28 @@ Screenshots can be added for:
 - Cloud deployment
 - Enhanced mobile responsiveness
 
+
+## 📸 Application Screenshots
+
+### 🏠 Home Page
+![Home Page](screenshots/home-page.png1)
+
+### 🔐 Login Page
+![Login Page](screenshots/login-page.png)
+
+### 👨‍💼 Admin Dashboard
+![Admin Dashboard](screenshots/admin-dashboard.png)
+
+### 👤 User Dashboard
+![User Dashboard](screenshots/user-dashboard.png)
+
+### ⭐ Store Ratings
+![Store Ratings](screenshots/store-ratings.png)
+
+### 🖥️ Backend Output
+![Backend Output](screenshots/backend-output.png)
+  
+
 ## 👩‍💻 Developed By
 
 **Sareddy Praveena**
