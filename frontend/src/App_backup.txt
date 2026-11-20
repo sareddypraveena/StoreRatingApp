@@ -1,0 +1,594 @@
+
+import { useEffect, useState } from 'react'
+import './App.css'
+
+const API_URL = 'http://localhost:5000'
+
+function App() {
+    const [page, setPage] = useState('home')
+    const [user, setUser] = useState(null)
+
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [name, setName] = useState('')
+
+    const [message, setMessage] = useState('')
+    const [loading, setLoading] = useState(false)
+
+    const [stores, setStores] = useState([])
+    const [storesLoading, setStoresLoading] = useState(false)
+    const [storesError, setStoresError] = useState('')
+    const [ratings, setRatings] = useState({})
+    const [ratingMessages, setRatingMessages] = useState({})
+    const [submittingStore, setSubmittingStore] = useState(null)
+
+    // Admin dashboard data
+    const [adminUsers, setAdminUsers] = useState([])
+    const [adminStores, setAdminStores] = useState([])
+    const [adminRatings, setAdminRatings] = useState([])
+    const [adminLoading, setAdminLoading] = useState(false)
+    const [adminError, setAdminError] = useState('')
+
+    const isAdmin = user?.role?.toUpperCase() === 'ADMIN'
+
+    function navigate(nextPage) {
+        setMessage('')
+        setPage(nextPage)
+    }
+
+    async function handleLogin(e) {
+        e.preventDefault()
+        setMessage('')
+        setLoading(true)
+
+        try {
+            const response = await fetch(API_URL + '/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, password })
+            })
+
+            const data = await response.json()
+
+            if (response.ok) {
+                if (!data.token) {
+                    setMessage('Login token missing. Check backend login API.')
+                    return
+                }
+                localStorage.setItem('token', data.token)
+                setUser(data.user)
+                setPassword('')
+                navigate(data.user.role?.toUpperCase() === 'ADMIN' ? 'admin' : 'dashboard')
+            } else {
+                setMessage(data.message || 'Login failed')
+            }
+        } catch (error) {
+            setMessage('Cannot connect to backend server')
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    async function handleRegister(e) {
+        e.preventDefault()
+        setMessage('')
+        setLoading(true)
+
+        try {
+            const response = await fetch(API_URL + '/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name,
+                    email,
+                    password
+                })
+            })
+
+            const data = await response.json()
+
+            if (response.ok) {
+                setName('')
+                setPassword('')
+                setMessage('Registration successful! Please login.')
+                setPage('login')
+            } else {
+                setMessage(data.message || 'Registration failed')
+            }
+        } catch (error) {
+            setMessage('Cannot connect to backend server')
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    function handleLogout() {
+        localStorage.removeItem('token')
+        setUser(null)
+        setName('')
+        setEmail('')
+        setPassword('')
+        setMessage('')
+        setPage('home')
+    }
+
+    async function fetchStores() {
+        setStoresLoading(true)
+        setStoresError('')
+
+        try {
+            const response = await fetch(API_URL + '/stores')
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch stores')
+            }
+
+            const data = await response.json()
+            setStores(data)
+        } catch (error) {
+            setStoresError('Cannot load stores. Check backend server.')
+        } finally {
+            setStoresLoading(false)
+        }
+    }
+
+    useEffect(() => {
+        if (page === 'stores') {
+            fetchStores()
+        }
+    }, [page])
+
+    useEffect(() => {
+        if (page !== 'admin' || !isAdmin) return
+
+        let cancelled = false
+
+        async function loadAdminData() {
+            setAdminLoading(true)
+            setAdminError('')
+
+            try {
+                const token = localStorage.getItem('token')
+                const authOptions = {
+                    headers: { Authorization: `Bearer ${token}` }
+                }
+                const responses = await Promise.all([
+                    fetch(API_URL + '/users', authOptions),
+                    fetch(API_URL + '/stores'),
+                    fetch(API_URL + '/ratings', authOptions)
+                ])
+
+                if (responses.some(response => !response.ok)) {
+                    throw new Error('Failed to load admin data')
+                }
+
+                const [usersData, storesData, ratingsData] =
+                    await Promise.all(responses.map(response => response.json()))
+
+                if (!cancelled) {
+                    setAdminUsers(usersData)
+                    setAdminStores(storesData)
+                    setAdminRatings(ratingsData)
+                }
+            } catch (error) {
+                if (!cancelled) {
+                    setAdminError('Cannot load admin data. Check backend server.')
+                }
+            } finally {
+                if (!cancelled) setAdminLoading(false)
+            }
+        }
+
+        loadAdminData()
+        return () => { cancelled = true }
+    }, [page, isAdmin])
+
+    async function handleRating(storeId) {
+        if (!user) {
+            setRatingMessages(prev => ({
+                ...prev,
+                [storeId]: 'Please login to submit a rating.'
+            }))
+            return
+        }
+
+        const rating = Number(ratings[storeId] || 5)
+
+        setSubmittingStore(storeId)
+        setRatingMessages(prev => ({
+            ...prev,
+            [storeId]: ''
+        }))
+
+        try {
+            const response = await fetch(API_URL + '/ratings', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({
+                    user_id: user.id,
+                    store_id: storeId,
+                    rating
+                })
+            })
+
+            const data = await response.json()
+
+            if (response.ok) {
+                setRatingMessages(prev => ({
+                    ...prev,
+                    [storeId]: 'Rating submitted successfully! 🎉'
+                }))
+
+                await fetchStores()
+            } else {
+                setRatingMessages(prev => ({
+                    ...prev,
+                    [storeId]: data.message || 'Rating submission failed'
+                }))
+            }
+        } catch (error) {
+            setRatingMessages(prev => ({
+                ...prev,
+                [storeId]: 'Cannot connect to backend server'
+            }))
+        } finally {
+            setSubmittingStore(null)
+        }
+    }
+
+    return (
+        <div className="app">
+            <header>
+                <h1>⭐ Store Rating App</h1>
+                <p>Find stores and share your ratings</p>
+            </header>
+
+            <main>
+                {page === 'home' && (
+                    <>
+                        <h2>Welcome to Store Rating App!</h2>
+                        <p>
+                            Discover stores, give ratings, and share your experience.
+                        </p>
+
+                        <div className="buttons">
+                            <button onClick={() => navigate('login')}>
+                                Login
+                            </button>
+
+                            <button onClick={() => navigate('register')}>
+                                Register
+                            </button>
+
+                            <button onClick={() => navigate('stores')}>
+                                View Stores
+                            </button>
+                        </div>
+                    </>
+                )}
+
+                {page === 'login' && (
+                    <div className="form-container">
+                        <h2>Login</h2>
+
+                        <form onSubmit={handleLogin}>
+                            <input
+                                type="email"
+                                placeholder="Enter Email"
+                                value={email}
+                                onChange={e => setEmail(e.target.value)}
+                                required
+                            />
+
+                            <input
+                                type="password"
+                                placeholder="Enter Password"
+                                value={password}
+                                onChange={e => setPassword(e.target.value)}
+                                required
+                            />
+
+                            {message && <p>{message}</p>}
+
+                            <button type="submit" disabled={loading}>
+                                {loading ? 'Logging in...' : 'Login'}
+                            </button>
+                        </form>
+
+                        <button onClick={() => navigate('register')}>
+                            Create New Account
+                        </button>
+
+                        <button onClick={() => navigate('home')}>
+                            Back to Home
+                        </button>
+                    </div>
+                )}
+
+                {page === 'register' && (
+                    <div className="form-container">
+                        <h2>Create Account 📝</h2>
+
+                        <form onSubmit={handleRegister}>
+                            <input
+                                type="text"
+                                placeholder="Enter Your Name"
+                                value={name}
+                                onChange={e => setName(e.target.value)}
+                                required
+                            />
+
+                            <input
+                                type="email"
+                                placeholder="Enter Email"
+                                value={email}
+                                onChange={e => setEmail(e.target.value)}
+                                required
+                            />
+
+                            <input
+                                type="password"
+                                placeholder="Enter Password (minimum 6 characters)"
+                                value={password}
+                                onChange={e => setPassword(e.target.value)}
+                                minLength={6}
+                                required
+                            />
+
+                            {message && (
+                                <p style={{ color: 'red' }}>{message}</p>
+                            )}
+
+                            <button type="submit" disabled={loading}>
+                                {loading ? 'Registering...' : 'Register'}
+                            </button>
+                        </form>
+
+                        <button onClick={() => navigate('login')}>
+                            Already have an account? Login
+                        </button>
+
+                        <button onClick={() => navigate('home')}>
+                            Back to Home
+                        </button>
+                    </div>
+                )}
+
+                {page === 'dashboard' && user && (
+                    <div className="form-container">
+                        <h2>Login Successful! 🎉</h2>
+                        <h3>Welcome, {user.name}!</h3>
+
+                        <p>Email: {user.email}</p>
+                        <p>Role: {user.role}</p>
+
+                        <button onClick={() => navigate('stores')}>
+                            View Stores
+                        </button>
+
+                        {isAdmin && (
+                            <button onClick={() => navigate('admin')}>
+                                Admin Dashboard
+                            </button>
+                        )}
+
+                        <button onClick={handleLogout}>
+                            Logout
+                        </button>
+                    </div>
+                )}
+
+                {page === 'admin' && isAdmin && (
+                    <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+                        <h2>Admin Dashboard 📊</h2>
+                        <p>Welcome, {user.name}!</p>
+
+                        {adminLoading && <p>Loading dashboard...</p>}
+                        {adminError && <p style={{ color: 'red' }}>{adminError}</p>}
+
+                        {!adminLoading && !adminError && (
+                            <>
+                                <div style={{
+                                    display: 'flex',
+                                    flexWrap: 'wrap',
+                                    justifyContent: 'center',
+                                    gap: '20px',
+                                    margin: '25px 0'
+                                }}>
+                                    {[
+                                        ['Total Users', adminUsers.length, '👥'],
+                                        ['Total Stores', adminStores.length, '🏬'],
+                                        ['Total Ratings', adminRatings.length, '⭐']
+                                    ].map(([label, count, emoji]) => (
+                                        <div key={label} style={{
+                                            background: 'white',
+                                            padding: '25px',
+                                            borderRadius: '12px',
+                                            minWidth: '200px',
+                                            boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                                        }}>
+                                            <h3>{emoji} {label}</h3>
+                                            <h2>{count}</h2>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                <h3>All Users</h3>
+                                <div style={{ overflowX: 'auto', marginBottom: '30px' }}>
+                                    <table style={{ width: '100%', borderCollapse: 'collapse', background: 'white' }}>
+                                        <thead>
+                                            <tr>
+                                                {['ID', 'Name', 'Email', 'Role'].map(heading => (
+                                                    <th key={heading} style={{ padding: '12px', border: '1px solid #ddd' }}>{heading}</th>
+                                                ))}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {adminUsers.map(item => (
+                                                <tr key={item.id}>
+                                                    <td style={{ padding: '10px', border: '1px solid #ddd' }}>{item.id}</td>
+                                                    <td style={{ padding: '10px', border: '1px solid #ddd' }}>{item.name}</td>
+                                                    <td style={{ padding: '10px', border: '1px solid #ddd' }}>{item.email}</td>
+                                                    <td style={{ padding: '10px', border: '1px solid #ddd' }}>{item.role}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <h3>All Ratings</h3>
+                                <div style={{ overflowX: 'auto', marginBottom: '30px' }}>
+                                    <table style={{ width: '100%', borderCollapse: 'collapse', background: 'white' }}>
+                                        <thead>
+                                            <tr>
+                                                {['ID', 'User', 'Store', 'Rating'].map(heading => (
+                                                    <th key={heading} style={{ padding: '12px', border: '1px solid #ddd' }}>{heading}</th>
+                                                ))}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {adminRatings.map(item => (
+                                                <tr key={item.id}>
+                                                    <td style={{ padding: '10px', border: '1px solid #ddd' }}>{item.id}</td>
+                                                    <td style={{ padding: '10px', border: '1px solid #ddd' }}>{item.user_name}</td>
+                                                    <td style={{ padding: '10px', border: '1px solid #ddd' }}>{item.store_name}</td>
+                                                    <td style={{ padding: '10px', border: '1px solid #ddd' }}>⭐ {item.rating} / 5</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </>
+                        )}
+
+                        <button onClick={() => navigate('stores')}>View Stores</button>{' '}
+                        <button onClick={handleLogout}>Logout</button>
+                    </div>
+                )}
+
+                {page === 'stores' && (
+                    <>
+                        <h2>Available Stores 🏬</h2>
+
+                        {storesLoading && <p>Loading stores...</p>}
+                        {storesError && (
+                            <p style={{ color: 'red' }}>{storesError}</p>
+                        )}
+
+                        <div
+                            className="stores-container"
+                            style={{
+                                display: 'flex',
+                                flexWrap: 'wrap',
+                                justifyContent: 'center',
+                                gap: '20px',
+                                marginTop: '30px'
+                            }}
+                        >
+                            {stores.map(store => (
+                                <div
+                                    className="store-card"
+                                    key={store.id}
+                                    style={{
+                                        background: 'white',
+                                        padding: '25px',
+                                        borderRadius: '12px',
+                                        width: '280px',
+                                        textAlign: 'left',
+                                        boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                                    }}
+                                >
+                                    <h3>🏬 {store.store_name}</h3>
+
+                                    <p>
+                                        <strong>Category:</strong> {store.category}
+                                    </p>
+
+                                    <p>
+                                        <strong>Address:</strong>{' '}
+                                        {store.address || 'Not available'}
+                                    </p>
+
+                                    <p>
+                                        <strong>Average Rating:</strong>{' '}
+                                        {store.average_rating !== null
+                                            ? '⭐ ' + store.average_rating + ' / 5'
+                                            : 'Not rated yet'}
+                                    </p>
+
+                                    <hr />
+
+                                    <h4>Give Your Rating</h4>
+
+                                    <select
+                                        value={ratings[store.id] || 5}
+                                        onChange={e => {
+                                            setRatings(prev => ({
+                                                ...prev,
+                                                [store.id]: Number(e.target.value)
+                                            }))
+                                        }}
+                                        style={{
+                                            width: '100%',
+                                            padding: '10px',
+                                            marginBottom: '12px'
+                                        }}
+                                    >
+                                        <option value={1}>⭐ 1 Star</option>
+                                        <option value={2}>⭐⭐ 2 Stars</option>
+                                        <option value={3}>⭐⭐⭐ 3 Stars</option>
+                                        <option value={4}>⭐⭐⭐⭐ 4 Stars</option>
+                                        <option value={5}>⭐⭐⭐⭐⭐ 5 Stars</option>
+                                    </select>
+
+                                    <button
+                                        onClick={() => handleRating(store.id)}
+                                        disabled={submittingStore === store.id}
+                                        style={{ width: '100%' }}
+                                    >
+                                        {submittingStore === store.id
+                                            ? 'Submitting...'
+                                            : 'Submit Rating'}
+                                    </button>
+
+                                    {ratingMessages[store.id] && (
+                                        <p
+                                            style={{
+                                                color: ratingMessages[store.id].includes(
+                                                    'successfully'
+                                                )
+                                                    ? 'green'
+                                                    : 'red'
+                                            }}
+                                        >
+                                            {ratingMessages[store.id]}
+                                        </p>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+
+                        <div style={{ marginTop: '30px' }}>
+                            <button
+                                onClick={() =>
+                                    navigate(user ? (isAdmin ? 'admin' : 'dashboard') : 'home')
+                                }
+                            >
+                                Back
+                            </button>
+                        </div>
+                    </>
+                )}
+            </main>
+        </div>
+    )
+}
+
+export default App
