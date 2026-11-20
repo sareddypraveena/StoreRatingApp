@@ -59,6 +59,7 @@ Each role has a dedicated dashboard and access to different functionalities.
    ![normal user](normal-user.png5.jpg)
    ![normal user](normal-user.png6.jpg)
    ![normal user](normal-user.png7.jpg)
+   ![normal user](pass.png1.jpg.jpg)
   
 
 ### 🏪 Store Owner
