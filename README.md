@@ -1,4 +1,4 @@
-# ⭐ Store Rating App
+<img width="1524" height="680" alt="image" src="https://github.com/user-attachments/assets/fa3b42e4-f21a-4d96-965c-e375b81dc5af" /># ⭐ Store Rating App
 
 ### 🏪 A Full Stack Store Rating and Management System
 
@@ -39,6 +39,8 @@ Each role has a dedicated dashboard and access to different functionalities.
 - View registered user information.
 - View store information and ratings.
 - Manage users and stores according to administrator permissions.
+  ![admin](ad.png1.jpg)
+
 
 ### 👤 Normal User
 
