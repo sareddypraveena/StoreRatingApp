@@ -219,7 +219,7 @@ Screenshots can be added for:
 ## 📸 Application Screenshots
 
 ### 🏠 Home Page
-![Home Page](screenshots/home-page.png1)
+![Home Page](home-page.png1.jpeg)
 
 ### 🔐 Login Page
 ![Login Page](screenshots/login-page.png)
