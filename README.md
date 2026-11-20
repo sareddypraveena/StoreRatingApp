@@ -257,7 +257,7 @@ Screenshots can be added for:
 ![four](user-page.png4.jpg)
 ![five](user-page.png5.jpg)
 ![six](user-page.png6.jpg)
-![seven](add-store.png1.jpg)
+![sevene](add-store.png1.jpg)
 
 
 
