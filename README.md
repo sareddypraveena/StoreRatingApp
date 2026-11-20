@@ -280,14 +280,19 @@ Screenshots can be added for:
 ## 🗄️ Database Architecture & MySQL Outputs
 
 The Store Rating App uses MySQL as its relational database to manage users, stores, and ratings.
-
 The database is designed to maintain data integrity, manage relationships between tables, and prevent duplicate store ratings.
+In database/schema.sql, create the store_rating database and these tables:
+Table	What to include
+users	id, name, email, password, address, role. Make email unique and store bcrypt password hashes.
+stores	id, store_name, email, address, category, owner_id. Link owner_id to users.id.
+ratings	id, user_id, store_id, rating. Add foreign keys to users and stores, enforce ratings from 1 to 5, and make (user_id, store_id) unique.
+products and product_ratings	Include both if you keep the existing product-rating feature.
 
 ### 🏗️ 1. Database Schema Architecture (ER Diagram)
 
 The Entity Relationship Diagram (ERD) illustrates the database structure and relationships between the `users`, `stores`, and `ratings` tables.
 
-## Project MYSQL Archeticture:
+## [View Database Schema]
 
 ┌───────────────────┐   ┌───────────────────┐   ┌───────────────────┐
  │   ADMINISTRATOR   │   │    NORMAL USER    │   │    STORE OWNER    │
@@ -353,7 +358,7 @@ Displays store details maintained in the database.
 
 Displays ratings submitted by users for different stores.
 
-![Ratings Table](screenshots/mysql-ratings.png)
+![Ratings Table](rating.sql.png1.png)
 
 ### 🔍 6. Database Query Results
 
@@ -379,8 +384,6 @@ SELECT * FROM ratings;
 ### 📁 8. SQL Schema File
 
 The SQL schema file contains the database table definitions and constraints required to recreate the database structure.
-
-[View Database Schema](schema.sql)
 
 ---
 Database:MySQL  
