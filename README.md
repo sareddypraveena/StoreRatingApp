@@ -51,6 +51,15 @@ Each role has a dedicated dashboard and access to different functionalities.
 - Update previously submitted store ratings.
 - Access a personalized user dashboard.
 - Log out securely.
+  ### 👤 Normal User
+   ![normal user](normal-user.png1.jpg)
+   ![normal user](normal-user.png2.jpg)
+   ![normal user](normal-user.png3.jpg)
+   ![normal user](normal-user.png4.jpg)
+   ![normal user](normal-user.png5.jpg)
+   ![normal user](normal-user.png6.jpg)
+   ![normal user](normal-user.png7.jpg)
+  
 
 ### 🏪 Store Owner
 
