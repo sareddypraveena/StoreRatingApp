@@ -240,6 +240,7 @@ Screenshots can be added for:
 ![third](user-page.png3.jpg)
 ![four](user-page.png4.jpg)
 ![five](user-page.png5.jpg)
+![five](user-page.png6.jpg)
 
 
 ### ⭐ Store Ratings
